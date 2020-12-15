@@ -1,24 +1,36 @@
+html{
+    background-image: url("../assets/background.jpg");
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
 body {
     display: grid;
     grid-template-areas:
             "left_aside top_bar right_aside"
             "left_aside viewport_game right_aside"
             "left_aside .  right_aside";
-    grid-template-rows: 80px 1fr 70px;
-    grid-template-columns: 20% 1fr 15%;
+    grid-template-rows: auto 1000px auto;
+    grid-template-columns: auto 1000px auto;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
     height: 100vh;
     margin: 0;
 }
 
-aside, div {
+aside {
     padding: 1.2em;
-    background: gold;
+    background: rgba(245,245,245,0.47);
+    border-radius: 25px;
+    border: 1px solid rgba(249, 254, 0, 100);
 }
 
 .top_bar{
     grid-area: top_bar;
+
+    background-color: rgba(0,0,0,0.9);
+    margin-top: 10px;
+    height: 35px;
 }
 
 .left_aside{
@@ -27,8 +39,84 @@ aside, div {
 
 .viewport_game{
     grid-area: viewport_game;
+    display: grid;
+    grid-template-areas:
+            "top_left_a top_center_a top_right_a"
+            "center_left_a center_center_a center_right_a"
+            "bottom_left_a bottom_center_a bottom_right_a";
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto auto auto;
 }
 
 .right_aside{
     grid-area: right_aside;
+}
+
+/*-----======   TOP   ======------*/
+
+#top_left{
+    background-image: url("../assets/options/wallgif.gif");
+    grid-area: top_left_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#top_center{
+    background-image: url("../assets/options/nothing.png");
+    grid-area: top_center_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#top_right{
+    background-image: url("../assets/options/wallgif.gif");
+    grid-area: top_right_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+/*-----======   CENTER   ======------*/
+
+#center_left{
+    background-image: url("../assets/options/nothing.png");
+    grid-area: center_left_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#center_center{
+    background-image: url("../assets/options/nothing.png");
+    grid-area: center_center_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#center_right{
+    background-image: url("../assets/options/enemy.png");
+    grid-area: center_right_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+/*-----======   BOTTOM   ======------*/
+
+#bottom_left{
+    background-image: url("../assets/options/nothing.png");
+    grid-area: bottom_left_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#bottom_center{
+    background-image: url("../assets/options/loot.png");
+    grid-area: bottom_center_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
+}
+
+#bottom_right{
+    background-image: url("../assets/options/wallgif.gif");
+    grid-area: bottom_right_a;
+    background-repeat: no-repeat;
+    background-size: 101%;
 }
