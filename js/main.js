@@ -86,7 +86,7 @@ newPlayerButton.addEventListener("click", () => {
     }
 });
 
-
+//Holi
 async function fetchh(name) {
    await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
        .then(function (response) {
