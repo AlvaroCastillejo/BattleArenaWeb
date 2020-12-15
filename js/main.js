@@ -4,7 +4,7 @@ class Player {
         this._name = name;
         this._x = x;
         this._y = y;
-        this._d = d;
+        this._direction = d;
         this._attack = attack;
         this._defense = defense;
         this._vp = vp;
@@ -24,8 +24,8 @@ class Player {
     get y() {
         return this._y;
     }
-    get d() {
-        return this._d;
+    get direction() {
+        return this._direction;
     }
     get attack() {
         return this._attack;
@@ -56,8 +56,8 @@ class Player {
     set y(value) {
         this._y = value;
     }
-    set d(value) {
-        this._d = value;
+    set direction(value) {
+        this._direction = value;
     }
     set attack(value) {
         this._attack = value;
@@ -76,17 +76,40 @@ class Player {
     }
 }
 
-const p = new Player();
+
+let player = new Player();
 
 let newPlayerButton = document.getElementById("new_player");
 newPlayerButton.addEventListener("click", () => {
-    async function fetchSpawn() {
-        await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
-            .then(response => response.json());
-    }
+    let name = document.getElementById("input_name").value;
+    fetchSpawn(name);
 });
 
-//Holi
+async function fetchSpawn(name) {
+    await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
+        .then(response => response.json())
+        .then(data => {
+            player.id = data.token;
+            player.name = name;
+            fetchPlayer(player.id);
+        });
+}
+
+function fetchPlayer(token) {
+    return fetch("http://battlearena.danielamo.info/api/player/b89f9719/" + token)
+        .then(response => response.json())
+        .then(data => {
+            player.x = data.x;
+            player.y = data.y;
+            player.direction = data.direction;
+            player.attack = data.attack;
+            player.defense = data.defense;
+            player.vp = data.vitalpoints;
+            player.image = data.image;
+            player.object = data.object;
+        });
+}
+
 async function fetchh(name) {
    await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
        .then(function (response) {
@@ -113,10 +136,7 @@ function fetchMap(token) {
        .then(response => response.json());
 }
 
-function fetchPlayer(token) {
-   return fetch("http://battlearena.danielamo.info/api/player/b89f9719/" + token)
-       .then(response => response.json());
-}
+
 
 function fetcMove(token, direccion) {
    return fetch("http://battlearena.danielamo.info/api/move/b89f9719/" + token + "/" + direccion)
