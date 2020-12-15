@@ -1,3 +1,34 @@
-p{
-    color: aqua;
+body {
+    display: grid;
+    grid-template-areas:
+            "left_aside top_bar right_aside"
+            "left_aside viewport_game right_aside"
+            "left_aside .  right_aside";
+    grid-template-rows: 80px 1fr 70px;
+    grid-template-columns: 20% 1fr 15%;
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+    height: 100vh;
+    margin: 0;
+}
+
+aside, div {
+    padding: 1.2em;
+    background: gold;
+}
+
+.top_bar{
+    grid-area: top_bar;
+}
+
+.left_aside{
+    grid-area: left_aside;
+}
+
+.viewport_game{
+    grid-area: viewport_game;
+}
+
+.right_aside{
+    grid-area: right_aside;
 }
