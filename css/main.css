@@ -55,7 +55,7 @@ aside {
 /*-----======   TOP   ======------*/
 
 #top_left{
-    background-image: url("../assets/options/wallgif.gif");
+    background-image: url("../assets/options/nothing.png");
     grid-area: top_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
