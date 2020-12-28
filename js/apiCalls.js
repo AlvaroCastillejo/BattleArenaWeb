@@ -7,6 +7,7 @@ async function fetchSpawn(name) {
         .then(response => response.json())
         .then(data => {
             player.id = data.token;
+            player.code = data.code;
             player.name = name;
             fetchPlayer(player.id);
         }).then(() => {
@@ -129,6 +130,16 @@ function updateGameView(){
     } else {
         bottom_right.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
     }
+}
+
+function fetchDeletePlayer() {
+    return fetch("http://battlearena.danielamo.info/api/remove/b89f9719/" + player.id + "/" + player.code)
+        .then(function(response) {
+            if(response.status === 200){
+                //TODO: Infromar por la consola del juego de que se ha eliminado correctamente.
+                console.log("Jugador eliminado correctamente");
+            }
+        });
 }
 
 function fetchRespawn(token) {

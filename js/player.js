@@ -1,6 +1,7 @@
 class Player {
-    constructor(id, name, x, y, d, attack, defense, vp, image, object) {
+    constructor(id, code, name, x, y, d, attack, defense, vp, image, object) {
         this._id = id;
+        this._code = code;
         this._name = name;
         this._x = x;
         this._y = y;
@@ -14,6 +15,9 @@ class Player {
     // Getters
     get id() {
         return this._id;
+    }
+    get code(){
+        return this._code;
     }
     get name() {
         return this._name;
@@ -46,6 +50,9 @@ class Player {
     // Setters
     set id(value) {
         this._id = value;
+    }
+    set code(value){
+        this._code = value;
     }
     set name(value) {
         this._name = value;
