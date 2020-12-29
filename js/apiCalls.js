@@ -5,6 +5,18 @@ let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-")); 
 
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
+        .then(function (response) {
+            if(response.status !== 200){
+                return;
+            }
+            response.json().then(function (data) {
+                player.id = data.token;
+                player.code = data.code;
+                player.name = name;
+                fetchPlayer(player.id);
+            })
+        })
+        /*OLD SYSTEM OPERATIONAL
         .then(response => response.json())
         .then(data => {
             player.id = data.token;
@@ -13,11 +25,29 @@ async function fetchSpawn(name) {
             fetchPlayer(player.id);
         }).then(() => {
             console.log("player token attack is: " + player.attack)
-        });
+        });*/
 }
 
 function fetchPlayer(token) {
     return fetch("http://battlearena.danielamo.info/api/player/b89f9719/" + token)
+        .then(function (response) {
+            if (response.status !== 200){
+                return;
+            }
+            response.json().then(function (data) {
+                player.x = data.x;
+                player.y = data.y;
+                player.direction = data.direction;
+                player.attack = data.attack;
+                player.defense = data.defense;
+                player.vp = data.vitalpoints;
+                player.image = data.image;
+                player.object = data.object;
+            }).then(() => {
+                fetchMap(token);
+            })
+        })
+        /*OLD SYSTEM OPERATIONAL
         .then(response => response.json())
         .then(data => {
             player.x = data.x;
@@ -30,11 +60,29 @@ function fetchPlayer(token) {
             player.object = data.object;
         }).then(() => {
             fetchMap(token);
-        });
+        });*/
 }
 
 function fetchMap(token) {
     return fetch("http://battlearena.danielamo.info/api/map/b89f9719/" + token)
+        .then(function (response) {
+            if(response.status !== 200){
+                return;
+            }
+            response.json().then(function (data) {
+                data.enemies.forEach((item) => {
+                    let x = item.x;
+                    let y = item.y;
+                    map[y][x] = 1;
+                    map_direction[y][x] = item.direction;
+                });
+                data.objects.forEach((item) => {
+                    map_objects[item.y][item.x] = 1;
+                });
+                updateGameView();
+            });
+        })
+        /*OLD SYSTEM OPERATIONAL
         .then(response => response.json())
         .then(data => {
             data.enemies.forEach((item) => {
@@ -47,7 +95,7 @@ function fetchMap(token) {
                 map_objects[item.y][item.x] = 1;
             });
             updateGameView();
-        });
+        });*/
 }
 
 function updateGameView(){
@@ -282,6 +330,22 @@ function fetchMovePlayer(direction){
         });
 }
 
+function fetchAttack() {
+    return fetch("http://battlearena.danielamo.info/api/attack/b89f9719/" + player.id + "/" + player.direction)
+        .then(function(response){
+            if(response.status !== 200){
+                //TODO: Mostrar por la consola el error.
+                return;
+            }
+            response.json().then(function (data) {
+                //TODO: Mostrar por la consola los puntos quitados.
+                console.log("hp taken: " + data);
+            })
+        }).catch(function (err) {
+            console.log("ERROR " + err);
+        });
+}
+
 function fetchRespawn(token) {
     return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + token)
         .then(response => response.json());
@@ -299,10 +363,7 @@ function fetcMove(token, direccion) {
         .then(response => response.json());
 }
 
-function fetchAttack(token, direccion) {
-    return fetch("http://battlearena.danielamo.info/api/attack/b89f9719/" + token + "/" + direccion)
-        .then(response => response.json());
-}
+
 
 function fetchCraft(token) {
     return fetch("http:// battlearena.danielamo.info/api/craft/b89f9719/" + token)

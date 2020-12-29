@@ -35,6 +35,8 @@ document.addEventListener('keyup', (e) => {
         else if (e.keyCode === 40) code = "LOOKING DOWN";
         else if (e.keyCode === 37) code = "LOOKING LEFT";
         else if (e.keyCode === 39) code = "LOOKING RIGHT";
+        else if (e.keyCode === 32) code = "ATTACK";
+        else if (e.keyCode === 17) code = "PICKUP";
     }
     if(typeof player.name !== "undefined"){
         if(code === "UP"){
@@ -65,6 +67,10 @@ document.addEventListener('keyup', (e) => {
         } else if (code === "LOOKING RIGHT") {
             player.direction = "E";
             updateGameView();
+        } else if (code === "ATTACK") {
+            fetchAttack().then(() => {
+
+            })
         }
     }
 });
