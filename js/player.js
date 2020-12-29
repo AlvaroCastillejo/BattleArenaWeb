@@ -87,16 +87,16 @@ class Player {
         let new_y = Number(player.y);
         switch (direction) {
             case "N":
-                new_x -= 1;
-                break;
-            case "S":
-                new_x += 1;
-                break;
-            case "E":
                 new_y += 1;
                 break;
-            case "O":
+            case "S":
                 new_y -= 1;
+                break;
+            case "E":
+                new_x += 1;
+                break;
+            case "O":
+                new_x -= 1;
                 break;
         }
         player.x = String(new_x);
