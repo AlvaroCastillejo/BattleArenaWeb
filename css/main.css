@@ -120,3 +120,11 @@ aside {
     background-repeat: no-repeat;
     background-size: 101%;
 }
+
+#attack_1{
+    display: none;
+}
+
+#missed{
+    display: none;
+}

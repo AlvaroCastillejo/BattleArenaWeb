@@ -43,6 +43,7 @@ function fetchPlayer(token) {
                 player.vp = data.vitalpoints;
                 player.image = data.image;
                 player.object = data.object;
+                //document.getElementById("ambient").play();
             }).then(() => {
                 fetchMap(token);
             })
@@ -314,6 +315,7 @@ function fetchDeletePlayer() {
                 //TODO: Infromar por la consola del juego de que se ha eliminado correctamente.
                 console.log("Jugador eliminado correctamente");
                 player = new Player();
+                //document.getElementById("ambient).pause();
             }
         });
 }
@@ -340,6 +342,14 @@ function fetchAttack() {
             response.json().then(function (data) {
                 //TODO: Mostrar por la consola los puntos quitados.
                 console.log("hp taken: " + data);
+                if(data === 0){
+                    let audio = document.getElementById("missed");
+                    audio.play();
+                } else {
+                    let audio = document.getElementById("attack_1");
+                    audio.play();
+                }
+                return data;
             })
         }).catch(function (err) {
             console.log("ERROR " + err);
