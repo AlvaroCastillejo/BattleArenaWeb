@@ -53,8 +53,19 @@ document.addEventListener('keyup', (e) => {
             fetchMovePlayer("E").then(() => {
                 player.direction = "E";
             })
+        } else if (code === "LOOKING UP") {
+            player.direction = "N";
+            updateGameView();
+        } else if (code === "LOOKING DOWN") {
+            player.direction = "S";
+            updateGameView();
+        } else if (code === "LOOKING LEFT") {
+            player.direction = "O";
+            updateGameView();
+        } else if (code === "LOOKING RIGHT") {
+            player.direction = "E";
+            updateGameView();
         }
-
     }
 });
 
