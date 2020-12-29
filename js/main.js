@@ -20,5 +20,13 @@ deletePlayerButton.addEventListener("click", () =>{
     }
     fetchDeletePlayer().then(() => {
         //TODO: Mostrar pantalla de inicio.
+        showHomeScreen();
     })
+});
+
+document.addEventListener('keyup', (e) => {
+    if(typeof player.name !== "undefined"){
+        if (e.code === "ArrowUp")        alert("UP");
+        else if (e.code === "ArrowDown") alert("DOWN");
+    }
 });

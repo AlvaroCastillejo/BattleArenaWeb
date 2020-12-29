@@ -55,21 +55,21 @@ aside {
 /*-----======   TOP   ======------*/
 
 #top_left{
-    background-image: url("../assets/options/nothing.png");
+    background-image: url("../assets/homescreen/homescreen_01.png");
     grid-area: top_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #top_center{
-    background-image: url("../assets/options/nothing.png");
+    background-image: url("../assets/homescreen/homescreen_02.png");
     grid-area: top_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #top_right{
-    background-image: url("../assets/options/wallgif.gif");
+    background-image: url("../assets/homescreen/homescreen_03.png");
     grid-area: top_right_a;
     background-repeat: no-repeat;
     background-size: 101%;
@@ -78,21 +78,21 @@ aside {
 /*-----======   CENTER   ======------*/
 
 #center_left{
-    background-image: url("../assets/options/nothing.png");
+    background-image: url("../assets/homescreen/homescreen_04.png");
     grid-area: center_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #center_center{
-    background-image: url("../assets/options/nothing.png");
+    background-image: url("../assets/homescreen/homescreen_05.png");
     grid-area: center_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #center_right{
-    background-image: url("../assets/options/enemy.png");
+    background-image: url("../assets/homescreen/homescreen_06.png");
     grid-area: center_right_a;
     background-repeat: no-repeat;
     background-size: 101%;
@@ -101,21 +101,21 @@ aside {
 /*-----======   BOTTOM   ======------*/
 
 #bottom_left{
-    background-image: url("../assets/options/nothing.png");
+    background-image: url("../assets/homescreen/homescreen_07.png");
     grid-area: bottom_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #bottom_center{
-    background-image: url("../assets/options/loot.png");
+    background-image: url("../assets/homescreen/homescreen_08.png");
     grid-area: bottom_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
 
 #bottom_right{
-    background-image: url("../assets/options/wallgif.gif");
+    background-image: url("../assets/homescreen/homescreen_09.png");
     grid-area: bottom_right_a;
     background-repeat: no-repeat;
     background-size: 101%;

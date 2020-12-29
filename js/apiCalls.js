@@ -132,12 +132,37 @@ function updateGameView(){
     }
 }
 
+function showHomeScreen(){
+    let top_left = document.getElementById("top_left");
+    let top_center = document.getElementById("top_center");
+    let top_right = document.getElementById("top_right");
+
+    let center_left = document.getElementById("center_left");
+    let center_center = document.getElementById("center_center");
+    let center_right = document.getElementById("center_right");
+
+    let bottom_left = document.getElementById("bottom_left");
+    let bottom_center = document.getElementById("bottom_center");
+    let bottom_right = document.getElementById("bottom_right");
+
+    top_left.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_01.png");background-repeat: no-repeat;background-size: 101%;');
+    top_center.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_02.png");background-repeat: no-repeat;background-size: 101%;');
+    top_right.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_03.png");background-repeat: no-repeat;background-size: 101%;');
+    center_left.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_04.png");background-repeat: no-repeat;background-size: 101%;');
+    center_center.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_05.png");background-repeat: no-repeat;background-size: 101%;');
+    center_right.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_06.png");background-repeat: no-repeat;background-size: 101%;');
+    bottom_left.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_07.png");background-repeat: no-repeat;background-size: 101%;');
+    bottom_center.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_08.png");background-repeat: no-repeat;background-size: 101%;');
+    bottom_right.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_09.png");background-repeat: no-repeat;background-size: 101%;');
+}
+
 function fetchDeletePlayer() {
     return fetch("http://battlearena.danielamo.info/api/remove/b89f9719/" + player.id + "/" + player.code)
         .then(function(response) {
             if(response.status === 200){
                 //TODO: Infromar por la consola del juego de que se ha eliminado correctamente.
                 console.log("Jugador eliminado correctamente");
+                player = new Player();
             }
         });
 }
