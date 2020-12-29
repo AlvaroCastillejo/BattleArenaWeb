@@ -122,8 +122,6 @@ function updateGameView(){
         bottom_right.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
     }
 
-
-
     try{
         if(player.x === "0"){
             center_left.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
@@ -154,7 +152,7 @@ function updateGameView(){
         } else if(map_objects[player.y][player.x] === 1){
             center_center.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
         } else {
-            center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;');
+            center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
         }
     } catch (e) {
         center_center.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
@@ -179,8 +177,6 @@ function updateGameView(){
     } catch (e) {
         center_right.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
     }
-
-
 
     try{
         if(player.x === "0"){
@@ -237,7 +233,6 @@ function updateGameView(){
     } catch (e) {
         top_right.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
     }
-
 }
 
 function showHomeScreen(){

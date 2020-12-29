@@ -88,15 +88,19 @@ class Player {
         switch (direction) {
             case "N":
                 new_y += 1;
+                player.direction = "N";
                 break;
             case "S":
                 new_y -= 1;
+                player.direction = "S";
                 break;
             case "E":
                 new_x += 1;
+                player.direction = "E";
                 break;
             case "O":
                 new_x -= 1;
+                player.direction = "O";
                 break;
         }
         player.x = String(new_x);

@@ -39,19 +39,19 @@ document.addEventListener('keyup', (e) => {
     if(typeof player.name !== "undefined"){
         if(code === "UP"){
             fetchMovePlayer("N").then(() => {
-
+                player.direction = "N";
             })
         } else if (code === "DOWN"){
             fetchMovePlayer("S").then(() => {
-
+                player.direction = "S";
             })
         } else if (code === "LEFT"){
             fetchMovePlayer("O").then(() => {
-
+                player.direction = "O";
             })
         } else if (code === "RIGHT"){
             fetchMovePlayer("E").then(() => {
-
+                player.direction = "E";
             })
         }
 
