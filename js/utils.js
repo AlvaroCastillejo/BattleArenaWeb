@@ -4,12 +4,23 @@ function orientationFactor(orientation){
             return 90;
         case "S":
             return -90;
-            break;
-        case "W":
+        case "O":
             return 0;
-            break;
         case "E":
             return 180;
-            break;
     }
 }
+
+var dispatchForCode = function(event, callback) {
+    var code;
+
+    if (event.key !== undefined) {
+        code = event.key;
+    } else if (event.keyIdentifier !== undefined) {
+        code = event.keyIdentifier;
+    } else if (event.keyCode !== undefined) {
+        code = event.keyCode;
+    }
+
+    callback(code);
+};

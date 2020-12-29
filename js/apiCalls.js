@@ -1,5 +1,6 @@
 let player = new Player();
-let map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy, 2: object, 3: wall
+let map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy
+let map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
 let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
 
 async function fetchSpawn(name) {
@@ -43,7 +44,7 @@ function fetchMap(token) {
                 map_direction[x][y] = item.direction;
             });
             data.objects.forEach((item) => {
-                map[item.x][item.y] = 2;
+                map_objects[item.x][item.y] = 1;
             });
             updateGameView();
         });
@@ -62,28 +63,47 @@ function updateGameView(){
     let bottom_center = document.getElementById("bottom_center");
     let bottom_right = document.getElementById("bottom_right");
 
-    center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
+    //center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
     //document.querySelector("html").setAttribute("style", 'background-image: url("../assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;');
 
-    if(map[player.x-1][player.y-1] === 1){
-        top_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][player.y-1]) +'deg);');
-    } else if(map[player.x-1][player.y-1] === 2){
-        top_left.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
-    } else {
-        top_left.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
+    try{
+        if(map[player.x-1][player.y-1] === 1){
+            if(map_objects[player.x-1][player.y-1] === 1){
+                top_left.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][player.y-1]) +'deg);');
+            } else {
+                top_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][player.y-1]) +'deg);');
+            }
+        } else if(map_objects[player.x-1][player.y-1] === 1){
+            top_left.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
+        } else {
+            top_left.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
+        }
+    } catch (e) {
+        top_left.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
     }
 
+
     if(map[player.x-1][player.y] === 1){
-        top_center.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][player.y]) +'deg);');
-    } else if(map[player.x-1][player.y] === 2){
+        if(map_objects[player.x-1][player.y] === 1) {
+            top_center.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][player.y]) +'deg);');
+        } else {
+            top_center.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[player.x-1][player.y]) + 'deg);');
+        }
+    } else if(map_objects[player.x-1][player.y] === 1){
         top_center.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         top_center.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
     }
 
+    /////////////////////////////////////
+
     if(map[player.x-1][Number(player.y)+1] === 1){
-        top_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][Number(player.y)+1]) +'deg);');
-    } else if(map[player.x-1][Number(player.y)+1] === 2){
+        if(map_objects[player.x-1][Number(player.y)+1] === 1){
+            top_right.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x-1][Number(player.y)+1]) +'deg);');
+        } else {
+            top_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[player.x-1][Number(player.y)+1]) + 'deg);');
+        }
+    } else if(map_objects[player.x-1][Number(player.y)+1] === 1){
         top_right.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         top_right.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
@@ -91,16 +111,36 @@ function updateGameView(){
 
 
     if(map[player.x][player.y-1] === 1){
-        center_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x][player.y-1]) +'deg);');
-    } else if(map[player.x][player.y-1] === 2){
+        if(map_objects[player.x][player.y-1] === 1){
+            center_left.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x][player.y-1]) +'deg);');
+        } else {
+            center_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x][player.y-1]) +'deg);');
+        }
+    } else if(map_objects[player.x][player.y-1] === 1){
         center_left.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         center_left.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
     }
 
+    if(map[player.x][player.y] === 1){
+        if(map_objects[player.x][player.y] === 1){
+            center_center.setAttribute("style", 'background-image: url("assets/options/character_enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
+        } else {
+            center_center.setAttribute("style", 'background-image: url("assets/options/character_enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
+        }
+    } else if(map_objects[player.x][player.y] === 1){
+        center_center.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
+    } else {
+        center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;');
+    }
+
     if(map[player.x][Number(player.y)+1] === 1){
-        center_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x][Number(player.y)+1]) +'deg);');
-    } else if(map[player.x][Number(player.y)+1] === 2){
+        if(map_objects[player.x][Number(player.y)+1] === 1){
+            center_right.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[player.x][Number(player.y)+1]) +'deg);');
+        } else {
+            center_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[player.x][Number(player.y)+1]) + 'deg);');
+        }
+    } else if(map_objects[player.x][Number(player.y)+1] === 1){
         center_right.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         center_right.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
@@ -108,24 +148,36 @@ function updateGameView(){
 
 
     if(map[Number(player.x)+1][player.y-1] === 1){
-        bottom_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][player.y-1]) +'deg);');
-    } else if(map[Number(player.x)+1][player.y-1] === 2){
+        if(map_objects[Number(player.x)+1][player.y-1] === 1){
+            bottom_left.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][player.y-1]) +'deg);');
+        } else {
+            bottom_left.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[Number(player.x)+1][player.y-1]) + 'deg);');
+        }
+    } else if(map_objects[Number(player.x)+1][player.y-1] === 1){
         bottom_left.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         bottom_left.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
     }
 
     if(map[Number(player.x)+1][player.y] === 1){
-        bottom_center.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][player.y]) +'deg);');
-    } else if(map[Number(player.x)+1][player.y] === 2){
+        if(map_objects[Number(player.x)+1][player.y] === 1){
+            bottom_center.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][player.y]) +'deg);');
+        } else {
+            bottom_center.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[Number(player.x)+1][player.y]) + 'deg);');
+        }
+    } else if(map_objects[Number(player.x)+1][player.y] === 1){
         bottom_center.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         bottom_center.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
     }
 
     if(map[Number(player.x)+1][Number(player.y)+1] === 1){
-        bottom_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][Number(player.y)+1]) +'deg);');
-    } else if(map[Number(player.x)+1][Number(player.y)+1] === 2){
+        if(map_objects[Number(player.x)+1][Number(player.y)+1] === 1){
+            bottom_right.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(map_direction[Number(player.x)+1][Number(player.y)+1]) +'deg);');
+        } else {
+            bottom_right.setAttribute("style", 'background-image: url("assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[Number(player.x)+1][Number(player.y)+1]) + 'deg);');
+        }
+    } else if(map_objects[Number(player.x)+1][Number(player.y)+1] === 1){
         bottom_right.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
     } else {
         bottom_right.setAttribute("style", 'background-image: url("assets/options/nothing.png");background-repeat: no-repeat;background-size: 101%;');
@@ -163,6 +215,18 @@ function fetchDeletePlayer() {
                 //TODO: Infromar por la consola del juego de que se ha eliminado correctamente.
                 console.log("Jugador eliminado correctamente");
                 player = new Player();
+            }
+        });
+}
+
+function fetchMovePlayer(direction){
+    return fetch("http://battlearena.danielamo.info/api/move/b89f9719/" + player.id + "/" + direction)
+        .then(function(response) {
+            if(response.status === 200){
+                player.move(direction);
+                updateGameView();
+            } else {
+                //TODO: Mostrar mensaje de error por la consola del juego.
             }
         });
 }

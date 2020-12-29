@@ -81,4 +81,25 @@ class Player {
     set object(value) {
         this._object = value;
     }
+
+    move(direction) {
+        let new_x = Number(player.x);
+        let new_y = Number(player.y);
+        switch (direction) {
+            case "N":
+                new_x -= 1;
+                break;
+            case "S":
+                new_x += 1;
+                break;
+            case "E":
+                new_y += 1;
+                break;
+            case "O":
+                new_y -= 1;
+                break;
+        }
+        player.x = String(new_x);
+        player.y = String(new_y);
+    }
 }

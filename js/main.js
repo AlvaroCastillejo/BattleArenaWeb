@@ -25,8 +25,36 @@ deletePlayerButton.addEventListener("click", () =>{
 });
 
 document.addEventListener('keyup', (e) => {
+    let code = "";
     if(typeof player.name !== "undefined"){
-        if (e.code === "ArrowUp")        alert("UP");
-        else if (e.code === "ArrowDown") alert("DOWN");
+        if (e.keyCode === 87)      code = "UP";
+        else if (e.keyCode === 83) code = "DOWN";
+        else if (e.keyCode === 65) code = "LEFT";
+        else if (e.keyCode === 68) code = "RIGHT";
+        else if (e.keyCode === 38) code = "LOOKING UP";
+        else if (e.keyCode === 40) code = "LOOKING DOWN";
+        else if (e.keyCode === 37) code = "LOOKING LEFT";
+        else if (e.keyCode === 39) code = "LOOKING RIGHT";
+    }
+    if(typeof player.name !== "undefined"){
+        if(code === "UP"){
+            fetchMovePlayer("N").then(() => {
+
+            })
+        } else if (code === "DOWN"){
+            fetchMovePlayer("S").then(() => {
+
+            })
+        } else if (code === "LEFT"){
+            fetchMovePlayer("O").then(() => {
+
+            })
+        } else if (code === "RIGHT"){
+            fetchMovePlayer("E").then(() => {
+
+            })
+        }
+
     }
 });
+
