@@ -73,6 +73,9 @@ function fetchMap(token) {
                 return;
             }
             response.json().then(function (data) {
+                map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy
+                map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
+                map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
                 data.enemies.forEach((item) => {
                     let x = item.x;
                     let y = item.y;
