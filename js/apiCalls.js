@@ -3,6 +3,7 @@ let map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing,
 let map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
 let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
 let intervalTimer = null;
+let pathname = "assets\\avatars\\my_character-" + player.image + ".png";
 
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
@@ -44,7 +45,11 @@ function fetchPlayer(token) {
                 player.vp = data.vitalpoints;
                 player.image = data.image;
                 player.object = data.object;
-                //document.getElementById("ambient").play();
+                document.getElementById("player_name_text").innerHTML = player.name;
+                document.getElementById("player_damage_text").innerHTML = player.attack;
+                document.getElementById("player_defense_text").innerHTML = player.defense;
+                document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
+                    +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
             }).then(() => {
                 intervalTimer = setInterval(myTimer, 5000);
                 //fetchMap(token);
