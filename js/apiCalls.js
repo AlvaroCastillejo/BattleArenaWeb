@@ -366,14 +366,10 @@ function fetchPlayersObjects(token) {
         .then(response => response.json());
 }
 
-
-
 function fetcMove(token, direccion) {
     return fetch("http://battlearena.danielamo.info/api/move/b89f9719/" + token + "/" + direccion)
         .then(response => response.json());
 }
-
-
 
 function fetchCraft(token) {
     return fetch("http:// battlearena.danielamo.info/api/craft/b89f9719/" + token)

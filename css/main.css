@@ -7,11 +7,11 @@ html{
 body {
     display: grid;
     grid-template-areas:
-            "left_aside top_bar right_aside"
-            "left_aside viewport_game right_aside"
-            "left_aside .  right_aside";
-    grid-template-rows: auto 1000px auto;
-    grid-template-columns: auto 1000px auto;
+            "left_aside . top_bar . right_aside"
+            "left_aside . viewport_game . right_aside"
+            "left_aside . . . right_aside";
+    grid-template-rows: auto 1200px auto;
+    grid-template-columns: 450px auto 1200px auto 450px;
     grid-row-gap: 10px;
     grid-column-gap: 10px;
     height: 100vh;
@@ -25,6 +25,7 @@ aside {
     border: 1px solid rgba(249, 254, 0, 100);
 }
 
+/*-----======   TOP BAR   ======------*/
 .top_bar{
     grid-area: top_bar;
 
@@ -33,10 +34,170 @@ aside {
     height: 35px;
 }
 
+/*-----======   LEFT ASIDE   ======------*/
 .left_aside{
     grid-area: left_aside;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
+#minimap{
+    position: relative;
+    width: 90%;
+    height: 25%;
+    background-color: black;
+    margin: 0 auto 0 auto;
+
+    background: url("../assets/minimap.jpg");
+    background-repeat: no-repeat;
+    background-size: 101%;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    border: double 5px;
+    //background-image: linear-gradient(white,white), linear-gradient(to right, grey, black);
+    background-clip: padding-box, border-box;
+    background-origin: border-box;
+}
+
+#options{
+    position: relative;
+    width: 90%;
+    height: 200px;
+    margin: 0 auto 0 auto;
+
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:
+            "np np"
+            "RevivirJugador ."
+            "EliminarJugador .";
+    grid-template-rows: auto auto auto;
+    grid-template-columns: 45% auto;
+}
+#NJ_div{
+    margin: 18px 10px 10px;
+    grid-area: np;
+}
+#RJ_div{
+    margin: 10px;
+    grid-area: RevivirJugador;
+}
+#EJ_div{
+    margin: 10px;
+    grid-area: EliminarJugador;
+}
+#input_name{
+    margin-left: 10px;
+}
+
+button{
+    display: inline-block;
+    width: 140px;
+    *display: inline;
+    zoom: 1;
+    padding: 6px 20px;
+    margin: 0;
+    cursor: pointer;
+    border: 1px solid #bbb;
+    overflow: visible;
+    font: bold 13px arial, helvetica, sans-serif;
+    text-decoration: none;
+    white-space: nowrap;
+    color: #555;
+
+    background-color: #ddd;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,1)), to(rgba(255,255,255,0)));
+    background-image: -webkit-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+    background-image: -moz-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+    background-image: -ms-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+    background-image: -o-linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+    background-image: linear-gradient(top, rgba(255,255,255,1), rgba(255,255,255,0));
+
+    -webkit-transition: background-color .2s ease-out;
+    -moz-transition: background-color .2s ease-out;
+    -o-transition: background-color .2s ease-out;
+    transition: background-color .2s ease-out;
+    background-clip: padding-box; /* Fix bleeding */
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+    -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+    text-shadow: 0 1px 0 rgba(255,255,255, .9);
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+button:hover{
+    background-color: #eee;
+    color: #555;
+}
+
+button:active{
+    background: #e9e9e9;
+    position: relative;
+    top: 1px;
+    text-shadow: none;
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+}
+
+#game_stats{
+    position: relative;
+    width: 90%;
+    height: 220px;
+    margin: 0 auto 0 auto;
+
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.stats_title{
+    padding-left: 20px;
+}
+
+.stats_container{
+    display: flex;
+    flex-direction: row;
+    padding-left: 30px;
+}
+
+p{
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 16px;
+
+    color: #FFFFFF;
+}
+
+#console{
+    position: relative;
+    width: 90%;
+    height: 311px;
+    margin: 0 auto 0 auto;
+
+    background: #2F2F2F;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25), 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+/*-----======   CENTER GAME   ======------*/
 .viewport_game{
     grid-area: viewport_game;
     display: grid;
@@ -48,26 +209,203 @@ aside {
     grid-template-columns: auto auto auto;
 }
 
+/*-----======   RIGHT ASIDE   ======------*/
 .right_aside{
     grid-area: right_aside;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-/*-----======   TOP   ======------*/
+#equipment_container{
+    position: relative;
+    width: 90%;
+    //height: 270px;
+    margin: 0 auto 0 auto;
 
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:
+            "title title"
+            "pic name"
+            "pic dmg"
+            "pic def";
+    grid-template-rows: auto auto auto auto;
+    grid-template-columns: 50% auto;
+}
+#title_equipment{
+    grid-area: title;
+}
+#title_equipment_rectangle{
+    position: relative;
+    width: 20%;
+    margin-left: 40%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+    background: #C4C4C4;
+    border-radius: 5px;
+}
+#text_equipment_title{
+    margin: 0 auto 0 auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+#picture_equipment{
+
+    grid-area: pic;
+    display: grid;
+    grid-template-areas: "rectangle_";
+    grid-row-gap: 10px;
+    grid-column-gap: 10px;
+}
+#picture_equipment_rectangle{
+    grid-area: rectangle_;
+
+    width: 80%;
+    height: 50%;
+    margin: auto;
+    padding-top: 50px;
+
+    background: rgba(81, 81, 81, 0.8);
+    border-radius: 25px;
+}
+#name_equipment{
+    grid-area: name;
+}
+#damage_equipment{
+    grid-area: dmg;
+    display: flex;
+}
+#defense_equipment{
+    grid-area: def;
+    display: flex;
+
+}
+
+#player_container{
+    position: relative;
+    width: 90%;
+    height: 500px;
+    margin: 0 auto 0 auto;
+
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:
+            ". ."
+            "player_pic player_name_"
+            "player_pic stats_title_"
+            "player_pic player_dmg_"
+            "player_pic player_def_"
+            ". .";
+    grid-template-rows: 12% auto auto auto auto 12%;
+    grid-template-columns: 50% auto;
+    row-gap: 20px;
+    column-gap: 20px;
+}
+#player_avatar{
+    grid-area: player_pic;
+    margin-left: 20px;
+    background-image: url("../assets/avatars/my_character-4.png");
+    background-repeat: no-repeat;
+    background-size: 220%;
+    background-position: -90px;
+    background-position-y: -40px;
+}
+#player_name{
+    grid-area: player_name_;
+}
+#player_stats_title{
+    grid-area: stats_title_;
+}
+#player_damage{
+    grid-area: player_dmg_;
+    display: flex;
+    flex-direction: row;
+}
+#player_defense{
+    grid-area: player_def_;
+    display: flex;
+    flex-direction: row;
+}
+
+#controls_container{
+    position: relative;
+    width: 90%;
+    height: 510px;
+    margin: 0 auto 0 auto;
+
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:
+            "wasd_pic"
+            "arrows_pic"
+            "extra";
+    grid-template-rows: auto auto auto;
+    grid-template-columns: auto;
+    row-gap: 10px;
+    column-gap: 20px;
+}
+#wasd_img{
+    grid-area: wasd_pic;
+    background-image: url("../assets/controls/wasd.png");
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position-x: 65px;
+    background-position-y: 10px;
+}
+#arrows_img{
+    grid-area: arrows_pic;
+    background-image: url("../assets/controls/arrows.png");
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position-x: 65px;
+    background-position-y: 10px;
+}
+#extra_keys{
+    grid-area: extra;
+    display: grid;
+    grid-template-areas:
+            "ctrl space_";
+    grid-template-rows: auto;
+    grid-template-columns: 40% auto;
+}
+#ctrl_img{
+    grid-area: ctrl;
+    background-image: url("../assets/controls/ctrl.png");
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position-x: 30px;
+    background-position-y: 43px;
+}
+#space_img{
+    grid-area: space_;
+    background-image: url("../assets/controls/space.png");
+    background-repeat: no-repeat;
+    background-size: 80%;
+    background-position-x: 0px;
+    background-position-y: 50px;
+}
+/*-----======   TOP   ======------*/
 #top_left{
     background-image: url("../assets/homescreen/homescreen_01.png");
     grid-area: top_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #top_center{
     background-image: url("../assets/homescreen/homescreen_02.png");
     grid-area: top_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #top_right{
     background-image: url("../assets/homescreen/homescreen_03.png");
     grid-area: top_right_a;
@@ -76,21 +414,18 @@ aside {
 }
 
 /*-----======   CENTER   ======------*/
-
 #center_left{
     background-image: url("../assets/homescreen/homescreen_04.png");
     grid-area: center_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #center_center{
     background-image: url("../assets/homescreen/homescreen_05.png");
     grid-area: center_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #center_right{
     background-image: url("../assets/homescreen/homescreen_06.png");
     grid-area: center_right_a;
@@ -99,21 +434,18 @@ aside {
 }
 
 /*-----======   BOTTOM   ======------*/
-
 #bottom_left{
     background-image: url("../assets/homescreen/homescreen_07.png");
     grid-area: bottom_left_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #bottom_center{
     background-image: url("../assets/homescreen/homescreen_08.png");
     grid-area: bottom_center_a;
     background-repeat: no-repeat;
     background-size: 101%;
 }
-
 #bottom_right{
     background-image: url("../assets/homescreen/homescreen_09.png");
     grid-area: bottom_right_a;
