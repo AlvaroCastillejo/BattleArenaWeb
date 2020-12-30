@@ -2,6 +2,7 @@ let player = new Player();
 let map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy
 let map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
 let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
+let intervalTimer = null;
 
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
@@ -45,7 +46,8 @@ function fetchPlayer(token) {
                 player.object = data.object;
                 //document.getElementById("ambient").play();
             }).then(() => {
-                fetchMap(token);
+                intervalTimer = setInterval(myTimer, 5000);
+                //fetchMap(token);
             })
         })
         /*OLD SYSTEM OPERATIONAL
@@ -98,6 +100,17 @@ function fetchMap(token) {
             updateGameView();
         });*/
 }
+
+
+function myTimer() {
+    console.log("fetching map");
+    if(player.name === undefined){
+        clearInterval(intervalTimer);
+    } else {
+        fetchMap(player.id);
+    }
+}
+
 
 function updateGameView(){
     let top_left = document.getElementById("top_left");
@@ -395,3 +408,4 @@ function fetchPickup(token) {
 function getPlayer(){
     return player;
 }
+
