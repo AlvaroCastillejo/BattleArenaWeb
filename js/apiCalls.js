@@ -53,6 +53,7 @@ function fetchPlayer(token) {
                 document.getElementById("player_name_text").innerHTML = player.name;
                 document.getElementById("player_damage_text").innerHTML = player.attack;
                 document.getElementById("player_defense_text").innerHTML = player.defense;
+                document.getElementById("player_vp_text").innerHTML = player.vp;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 updateHPBar();
@@ -124,14 +125,12 @@ function updateHPBar() {
     let lost_hp = last_hp-player.vp;
     console.log("lost hp: " + lost_hp);
     if(isNaN(lost_hp)) return;
-    let percentageToTake = (lost_hp*100)/full_hp;
-    if(lost_hp !== 0){
-        moveBar(percentageToTake);
-    }
+
 }
 
+var i = 0;
 function moveBar(n) {
-    var i = 0;
+
     if (i === 0) {
         i = 1;
         var elem = document.getElementById("myBar");
