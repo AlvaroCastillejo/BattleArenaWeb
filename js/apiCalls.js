@@ -1,4 +1,6 @@
 let player = new Player();
+let full_hp = null;
+let last_hp = null;
 let map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy
 let map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
 let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
@@ -16,6 +18,7 @@ async function fetchSpawn(name) {
                 player.code = data.code;
                 player.name = name;
                 fetchPlayer(player.id);
+                intervalTimer = setInterval(myTimer, 2000);
             })
         })
         /*OLD SYSTEM OPERATIONAL
@@ -37,12 +40,14 @@ function fetchPlayer(token) {
                 return;
             }
             response.json().then(function (data) {
+                last_hp = player.vp;
                 player.x = data.x;
                 player.y = data.y;
                 player.direction = data.direction;
                 player.attack = data.attack;
                 player.defense = data.defense;
                 player.vp = data.vitalpoints;
+                if(full_hp === null) full_hp = player.vp;
                 player.image = data.image;
                 player.object = data.object;
                 document.getElementById("player_name_text").innerHTML = player.name;
@@ -50,26 +55,13 @@ function fetchPlayer(token) {
                 document.getElementById("player_defense_text").innerHTML = player.defense;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
+                updateHPBar();
                 showMessageConsole("Player created succesfully.")
             }).then(() => {
-                intervalTimer = setInterval(myTimer, 5000);
+                fetchMap(player.id);
                 //fetchMap(token);
             })
         })
-        /*OLD SYSTEM OPERATIONAL
-        .then(response => response.json())
-        .then(data => {
-            player.x = data.x;
-            player.y = data.y;
-            player.direction = data.direction;
-            player.attack = data.attack;
-            player.defense = data.defense;
-            player.vp = data.vitalpoints;
-            player.image = data.image;
-            player.object = data.object;
-        }).then(() => {
-            fetchMap(token);
-        });*/
 }
 
 function fetchMap(token) {
@@ -94,32 +86,68 @@ function fetchMap(token) {
                 updateGameView();
             });
         })
-        /*OLD SYSTEM OPERATIONAL
-        .then(response => response.json())
-        .then(data => {
-            data.enemies.forEach((item) => {
-                let x = item.x;
-                let y = item.y;
-                map[y][x] = 1;
-                map_direction[y][x] = item.direction;
-            });
-            data.objects.forEach((item) => {
-                map_objects[item.y][item.x] = 1;
-            });
-            updateGameView();
-        });*/
 }
 
 
 function myTimer() {
-    console.log("fetching map");
     if(player.name === undefined){
         clearInterval(intervalTimer);
     } else {
-        fetchMap(player.id);
+        fetchPlayer(player.id);
     }
 }
 
+function updateMinimap(){
+    document.getElementById("minimap_container").innerHTML = "";
+    for (var i = 0; i < 40; i++) {
+        for (var j = 0; j < 40; j++) {
+            var div = document.createElement("div");
+            div.style.width = "1.57%";
+            div.style.height = "1.57%";
+            if(map[i][j] === 1){
+                div.style.backgroundImage = "url('assets/options/minimap/enemy.png')";
+                div.style.transform = 'rotate(' + orientationFactor(map_direction[i][j]) + 'deg);';
+            } else {
+                div.style.backgroundImage = "url('assets/options/minimap/nothing.png')";
+            }
+            div.style.backgroundSize = "100%";
+            div.style.backgroundRepeat = "no-repeat";
+            //else div.style.backgroundImage = "url('nothing.png')";
+            document.getElementById("minimap_container").appendChild(div);
+        }
+        var jump = document.createElement("br");
+        document.getElementById("minimap_container").appendChild(jump);
+    }
+}
+
+function updateHPBar() {
+    let lost_hp = last_hp-player.vp;
+    console.log("lost hp: " + lost_hp);
+    if(isNaN(lost_hp)) return;
+    let percentageToTake = (lost_hp*100)/full_hp;
+    if(lost_hp !== 0){
+        moveBar(percentageToTake);
+    }
+}
+
+function moveBar(n) {
+    var i = 0;
+    if (i === 0) {
+        i = 1;
+        var elem = document.getElementById("myBar");
+        var width = last_hp;
+        var id = setInterval(frame, 10);
+        function frame() {
+            if (width <= n) {
+                clearInterval(id);
+                i = 0;
+            } else {
+                width--;
+                elem.style.width = width + "%";
+            }
+        }
+    }
+}
 
 function updateGameView(){
     let top_left = document.getElementById("top_left");
@@ -134,8 +162,7 @@ function updateGameView(){
     let bottom_center = document.getElementById("bottom_center");
     let bottom_right = document.getElementById("bottom_right");
 
-    //center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
-    //document.querySelector("html").setAttribute("style", 'background-image: url("../assets/options/enemy.png");background-repeat: no-repeat;background-size: 101%;');
+    updateMinimap();
 
     try{
         if(player.x === "0"){
