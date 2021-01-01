@@ -26,7 +26,7 @@ async function fetchSpawn(name) {
             player.name = name;
             fetchPlayer(player.id);
         }).then(() => {
-            console.log("player token attack is: " + player.attack)
+            consoleInfo.log("player token attack is: " + player.attack)
         });*/
 }
 
@@ -50,6 +50,7 @@ function fetchPlayer(token) {
                 document.getElementById("player_defense_text").innerHTML = player.defense;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
+                showMessageConsole("Player created succesfully.")
             }).then(() => {
                 intervalTimer = setInterval(myTimer, 5000);
                 //fetchMap(token);
@@ -333,8 +334,8 @@ function fetchDeletePlayer() {
     return fetch("http://battlearena.danielamo.info/api/remove/b89f9719/" + player.id + "/" + player.code)
         .then(function(response) {
             if(response.status === 200){
-                //TODO: Infromar por la consola del juego de que se ha eliminado correctamente.
-                console.log("Jugador eliminado correctamente");
+                showMessageConsole("Player deleted succesfully.");
+
                 player = new Player();
                 //document.getElementById("ambient).pause();
             }
@@ -348,7 +349,7 @@ function fetchMovePlayer(direction){
                 player.move(direction);
                 updateGameView();
             } else {
-                //TODO: Mostrar mensaje de error por la consola del juego.
+                showMessageConsole("You can't move there!");
             }
         });
 }
@@ -357,12 +358,11 @@ function fetchAttack() {
     return fetch("http://battlearena.danielamo.info/api/attack/b89f9719/" + player.id + "/" + player.direction)
         .then(function(response){
             if(response.status !== 200){
-                //TODO: Mostrar por la consola el error.
+                showMessageConsole("You can't attack there!");
                 return;
             }
             response.json().then(function (data) {
-                //TODO: Mostrar por la consola los puntos quitados.
-                console.log("hp taken: " + data);
+                showMessageConsole("HP taken: " + data);
                 if(data === 0){
                     let audio = document.getElementById("missed");
                     audio.play();
@@ -408,7 +408,7 @@ function fetchPickup(token) {
             if (response.status !== 200) {
                 throw new Error(response.status);
             }else{
-                console.log(response.json());
+                consoleInfo.log(response.json());
             }
         })
 }*/
