@@ -17,6 +17,7 @@ async function fetchSpawn(name) {
                 player.id = data.token;
                 player.code = data.code;
                 player.name = name;
+                showMessageConsole("Player created succesfully.")
                 fetchPlayer(player.id);
                 intervalTimer = setInterval(myTimer, 2000);
             })
@@ -57,7 +58,6 @@ function fetchPlayer(token) {
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 updateHPBar();
-                showMessageConsole("Player created succesfully.")
             }).then(() => {
                 fetchMap(player.id);
                 //fetchMap(token);
