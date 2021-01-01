@@ -19,10 +19,8 @@ async function fetchSpawn(name) {
                 player.name = name;
                 fetchPlayer(player.id);
                 intervalTimer = setInterval(myTimer, 2000);
-                showMessageConsole("Player created succesfully.")
             })
         })
-
         /*OLD SYSTEM OPERATIONAL
         .then(response => response.json())
         .then(data => {
@@ -58,6 +56,7 @@ function fetchPlayer(token) {
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 updateHPBar();
+                showMessageConsole("Player created succesfully.")
             }).then(() => {
                 fetchMap(player.id);
                 //fetchMap(token);
@@ -126,18 +125,18 @@ function updateHPBar() {
     console.log("lost hp: " + lost_hp);
     if(isNaN(lost_hp)) return;
     let percentageToTake = (lost_hp*100)/full_hp;
-    if(lost_hp >= 0 ){
+    if(lost_hp !== 0){
         moveBar(percentageToTake);
     }
 }
-let i = 0;
+
 function moveBar(n) {
+    var i = 0;
     if (i === 0) {
         i = 1;
-        let elem = document.getElementById("myBar");
-        let width = last_hp;
-        console.log(last_hp);
-        let id = setInterval(frame, 10);
+        var elem = document.getElementById("myBar");
+        var width = last_hp;
+        var id = setInterval(frame, 10);
         function frame() {
             if (width <= n) {
                 clearInterval(id);

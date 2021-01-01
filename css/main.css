@@ -332,8 +332,10 @@ p{
             "player_pic stats_title_"
             "player_pic player_dmg_"
             "player_pic player_def_"
+            "player_pic player_vp_"
+            "player_pic ."
             ". .";
-    grid-template-rows: 12% auto auto auto auto 12%;
+    grid-template-rows: 12% auto auto auto auto auto auto 12%;
     grid-template-columns: 50% auto;
     row-gap: 20px;
     column-gap: 20px;
@@ -363,6 +365,12 @@ p{
     display: flex;
     flex-direction: row;
 }
+#player_vp{
+    grid-area: player_vp_;
+    display: flex;
+    flex-direction: row;
+}
+
 
 #controls_container{
     position: relative;
