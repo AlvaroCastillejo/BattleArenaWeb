@@ -54,6 +54,7 @@ function fetchPlayer(token) {
                 document.getElementById("player_name_text").innerHTML = player.name;
                 document.getElementById("player_damage_text").innerHTML = player.attack;
                 document.getElementById("player_defense_text").innerHTML = player.defense;
+                document.getElementById("player_vp_text").innerHTML = player.vp;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 updateHPBar();
@@ -124,29 +125,7 @@ function updateHPBar() {
     let lost_hp = last_hp-player.vp;
     console.log("lost hp: " + lost_hp);
     if(isNaN(lost_hp)) return;
-    let percentageToTake = (lost_hp*100)/full_hp;
-    if(lost_hp !== 0){
-        moveBar(percentageToTake);
-    }
-}
 
-function moveBar(n) {
-    var i = 0;
-    if (i === 0) {
-        i = 1;
-        var elem = document.getElementById("myBar");
-        var width = last_hp;
-        var id = setInterval(frame, 10);
-        function frame() {
-            if (width <= n) {
-                clearInterval(id);
-                i = 0;
-            } else {
-                width--;
-                elem.style.width = width + "%";
-            }
-        }
-    }
 }
 
 function updateGameView(){
@@ -404,6 +383,83 @@ function fetchAttack() {
         });
 }
 
+function fetchCraft() {
+    let img_url = 'https://vignette.wikia.nocookie.net/el-continente-de-arcadia-campana-de-dnd-5e/images/6/6f/Sunblade.jpeg/revision/latest/scale-to-width-down/310?cb=20190403183107&path-prefix=es';
+    let formData = new FormData();
+    let itemName = document.getElementById("craft_item_text").value;
+    let damage = String(Math.floor(Math.random() * (10 + 1)));
+    let defense = String(Math.floor(Math.random() * (10 + 1)));
+    formData.append('name', itemName);
+    formData.append('image', img_url);
+    formData.append('attack', damage);
+    formData.append('defense', defense);
+
+    document.getElementById("equipment_name").innerHTML = itemName;
+    document.getElementById("equipment_dmg_text").innerHTML = damage;
+    document.getElementById("equipment_def_text").innerHTML = defense;
+
+    /*return fetch("http://battlearena.danielamo.info/api/craft/b89f9719/" + player.id, {
+        method: 'PUT',
+        body: formData
+    })
+        .then(function(response){
+            if(response.status !== 200){
+                showMessageConsole("You can't craft that item!");
+                return;
+            }
+            showMessageConsole("The legendary " + itemName + " is now in your hands!");
+            document.getElementById("equipment_name").value = itemName;
+            document.getElementById("equipment_dmg_text").value = damage;
+            document.getElementById("equipment_def_text").value = defense;
+            response.json().then(function (data) {
+                showMessageConsole("The legendary " + itemName + " is now in your hands!");
+            })
+        }).catch(function (err) {
+            console.log("ERROR " + err);
+        });*/
+
+    var xhr = new XMLHttpRequest();
+    var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
+    xhr.open('POST', "http://battlearena.danielamo.info/api/craft/b89f9719/" + player.id, true);
+
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {//Call a function when the state changes.
+        if(xhr.status === 200) {
+            showMessageConsole("The legendary " + itemName + " is now in your hands!");
+            document.getElementById("equipment_name").value = itemName;
+            document.getElementById("equipment_dmg_text").value = damage;
+            document.getElementById("equipment_def_text").value = defense;
+            player.object = itemName;
+        } else {
+            showMessageConsole("You can't craft that item!");
+        }
+    };
+    xhr.send(params);
+}
+
+function fetchPickup(token) {
+    return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + token)
+        .then(response => response.json());
+
+    var xhr = new XMLHttpRequest();
+    var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
+    xhr.open('POST', "http://battlearena.danielamo.info/api/pickup/b89f9719/" + token, true);
+
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {//Call a function when the state changes.
+        if(xhr.status === 200) {
+            showMessageConsole("The legendary " + itemName + " is now in your hands!");
+            document.getElementById("equipment_name").value = itemName;
+            document.getElementById("equipment_dmg_text").value = damage;
+            document.getElementById("equipment_def_text").value = defense;
+            player.object = itemName;
+        } else {
+            showMessageConsole("You can't craft that item!");
+        }
+    };
+    xhr.send(params);
+}
+
 function fetchRespawn(token) {
     return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + token)
         .then(response => response.json());
@@ -414,20 +470,6 @@ function fetchPlayersObjects(token) {
         .then(response => response.json());
 }
 
-function fetcMove(token, direccion) {
-    return fetch("http://battlearena.danielamo.info/api/move/b89f9719/" + token + "/" + direccion)
-        .then(response => response.json());
-}
-
-function fetchCraft(token) {
-    return fetch("http:// battlearena.danielamo.info/api/craft/b89f9719/" + token)
-        .then(response => response.json());
-}
-
-function fetchPickup(token) {
-    return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + token)
-        .then(response => response.json());
-}
 
 /*async function fetchh(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
