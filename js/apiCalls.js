@@ -437,6 +437,7 @@ function fetchCraft() {
     xhr.send(params);
 }
 
+
 function fetchPickup(token) {
     return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + token)
         .then(response => response.json());
@@ -453,6 +454,7 @@ function fetchPickup(token) {
             document.getElementById("equipment_dmg_text").value = damage;
             document.getElementById("equipment_def_text").value = defense;
             player.object = itemName;
+            document.getElementById("items_collected_text").innerHTML = document.getElementById("items_collected_text").value + 1;
         } else {
             showMessageConsole("You can't craft that item!");
         }
