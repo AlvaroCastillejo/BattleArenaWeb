@@ -387,6 +387,10 @@ function fetchCraft() {
     let img_url = 'https://vignette.wikia.nocookie.net/el-continente-de-arcadia-campana-de-dnd-5e/images/6/6f/Sunblade.jpeg/revision/latest/scale-to-width-down/310?cb=20190403183107&path-prefix=es';
     let formData = new FormData();
     let itemName = document.getElementById("craft_item_text").value;
+    if(itemName.length === 0){
+        showMessageConsole("You must name the item first!");
+        return;
+    }
     let damage = String(Math.floor(Math.random() * (10 + 1)));
     let defense = String(Math.floor(Math.random() * (10 + 1)));
     formData.append('name', itemName);
@@ -397,26 +401,6 @@ function fetchCraft() {
     document.getElementById("equipment_name").innerHTML = itemName;
     document.getElementById("equipment_dmg_text").innerHTML = damage;
     document.getElementById("equipment_def_text").innerHTML = defense;
-
-    /*return fetch("http://battlearena.danielamo.info/api/craft/b89f9719/" + player.id, {
-        method: 'PUT',
-        body: formData
-    })
-        .then(function(response){
-            if(response.status !== 200){
-                showMessageConsole("You can't craft that item!");
-                return;
-            }
-            showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            document.getElementById("equipment_name").value = itemName;
-            document.getElementById("equipment_dmg_text").value = damage;
-            document.getElementById("equipment_def_text").value = defense;
-            response.json().then(function (data) {
-                showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            })
-        }).catch(function (err) {
-            console.log("ERROR " + err);
-        });*/
 
     var xhr = new XMLHttpRequest();
     var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
@@ -437,22 +421,18 @@ function fetchCraft() {
     xhr.send(params);
 }
 
-function fetchPickup(token) {
-    return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + token)
+function fetchPickup() {
+    return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + player.id)
         .then(response => response.json());
 
     var xhr = new XMLHttpRequest();
     var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
-    xhr.open('POST', "http://battlearena.danielamo.info/api/pickup/b89f9719/" + token, true);
+    xhr.open('POST', "http://battlearena.danielamo.info/api/pickup/b89f9719/" + player.id, true);
 
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onload = function() {//Call a function when the state changes.
         if(xhr.status === 200) {
-            showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            document.getElementById("equipment_name").value = itemName;
-            document.getElementById("equipment_dmg_text").value = damage;
-            document.getElementById("equipment_def_text").value = defense;
-            player.object = itemName;
+            //ok
         } else {
             showMessageConsole("You can't craft that item!");
         }
