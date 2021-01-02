@@ -1,10 +1,8 @@
 let newPlayerButton = document.getElementById("new_player");
-
 newPlayerButton.addEventListener("click", () => {
     if(typeof player.name !== "undefined"){
         //TODO: Mostrar por la consola del juego el error y las instrucciones.
-        showMessageConsole("The object already exists.")
-        console.log("El objeto ya existe");
+        showMessageConsole("The player already exists.");
         return;
     }
     let name = document.getElementById("input_name").value;
@@ -45,6 +43,9 @@ document.addEventListener('keyup', (e) => {
         if(code === "UP"){
             fetchMovePlayer("N").then(() => {
                 player.direction = "N";
+                document.getElementById("equipment_name").value = "E";
+                document.getElementById("equipment_dmg_text").value = "Es";
+                document.getElementById("equipment_def_text").value = "Es";
             })
         } else if (code === "DOWN"){
             fetchMovePlayer("S").then(() => {
@@ -78,3 +79,18 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
+let craftItemButton = document.getElementById("craft_item");
+craftItemButton.addEventListener(("click"), () => {
+    if(typeof player.name === "undefined"){
+        showMessageConsole("Your journey has not begin yet.");
+        return;
+    }
+
+    document.getElementById("equipment_name").value = "E";
+    document.getElementById("equipment_dmg_text").value = "Es";
+    document.getElementById("equipment_def_text").value = "Es";
+
+    fetchCraft().then(() => {
+        //TODO: Controlar códigos de error de todas las llamadas.
+    });
+});

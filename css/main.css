@@ -92,6 +92,39 @@ aside {
     grid-template-rows: auto auto auto;
     grid-template-columns: 45% auto;
 }
+
+#craft_container{
+    position: relative;
+    width: 90%;
+    height: 50px;
+    margin: 0 auto 0 auto;
+
+    background: rgba(0, 0, 0, 0.47);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:
+            "craft_button craft_input";
+    grid-template-rows: auto;
+    grid-template-columns: 45% auto;
+}
+
+#craft_item{
+    height: 30px;
+    grid-area: craft_button;
+    //margin: 0 auto 0 auto;
+    margin-top: 10px;
+    margin-left: 10px;
+
+}
+#craft_item_text{
+    height: 15px;
+    width: 150px;
+    grid-area: craft_input;
+    margin-top: 12.5px;
+
+}
+
 #NJ_div{
     margin: 18px 10px 10px;
     grid-area: np;
