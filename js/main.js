@@ -69,9 +69,9 @@ document.addEventListener('keyup', (e) => {
             player.direction = "E";
             updateGameView();
         } else if (code === "ATTACK") {
-            fetchAttack().then(() => {
-
-            })
+            fetchAttack();
+        } else if (code === "PICKUP"){
+            fetchPickup();
         }
     }
 });
@@ -87,7 +87,5 @@ craftItemButton.addEventListener(("click"), () => {
     document.getElementById("equipment_dmg_text").value = "Es";
     document.getElementById("equipment_def_text").value = "Es";
 
-    fetchCraft().then(() => {
-        //TODO: Controlar códigos de error de todas las llamadas.
-    });
+    fetchCraft();
 });

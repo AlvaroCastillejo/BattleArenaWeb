@@ -302,7 +302,12 @@ p{
 
     background: rgba(81, 81, 81, 0.8);
     border-radius: 25px;
+    /*background-image: url("https://image.flaticon.com/icons/png/512/375/375303.png");*/
 }
+#object_image{
+    /*//border-style: solid;*/
+}
+
 #name_equipment{
     grid-area: name;
 }
