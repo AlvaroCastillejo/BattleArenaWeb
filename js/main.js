@@ -94,3 +94,16 @@ craftItemButton.addEventListener(("click"), () => {
         //TODO: Controlar códigos de error de todas las llamadas.
     });
 });
+
+let reviveItemButton = document.getElementById("revive_player");
+reviveItemButton.addEventListener(("click"), () => {
+    if(typeof player.name === "undefined"){
+        showMessageConsole("Your journey has not begin yet.");
+        return;
+    }
+
+    fetchRespawn().then(() => {
+        //TODO: Controlar códigos de error de todas las llamadas.
+    });
+});
+

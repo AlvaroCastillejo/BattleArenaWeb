@@ -463,8 +463,12 @@ function fetchPickup(token) {
 }
 
 function fetchRespawn(token) {
-    return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + token)
-        .then(response => response.json());
+    return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + player.id)
+        .then(function(response) {
+            if(response.status === 200){
+                showMessageConsole("Player respawned succesfully.");
+            }
+        });
 }
 
 function fetchPlayersObjects(token) {
