@@ -43,9 +43,6 @@ document.addEventListener('keyup', (e) => {
         if(code === "UP"){
             fetchMovePlayer("N").then(() => {
                 player.direction = "N";
-                document.getElementById("equipment_name").value = "E";
-                document.getElementById("equipment_dmg_text").value = "Es";
-                document.getElementById("equipment_def_text").value = "Es";
             })
         } else if (code === "DOWN"){
             fetchMovePlayer("S").then(() => {
@@ -72,9 +69,9 @@ document.addEventListener('keyup', (e) => {
             player.direction = "E";
             updateGameView();
         } else if (code === "ATTACK") {
-            fetchAttack().then(() => {
-
-            })
+            fetchAttack();
+        } else if (code === "PICKUP"){
+            fetchPickup();
         }
     }
 });
@@ -90,9 +87,7 @@ craftItemButton.addEventListener(("click"), () => {
     document.getElementById("equipment_dmg_text").value = "Es";
     document.getElementById("equipment_def_text").value = "Es";
 
-    fetchCraft().then(() => {
-        //TODO: Controlar códigos de error de todas las llamadas.
-    });
+    fetchCraft();
 });
 
 let reviveItemButton = document.getElementById("revive_player");

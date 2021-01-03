@@ -6,6 +6,9 @@ let map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
 let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
 let intervalTimer = null;
 let pathname = "assets\\avatars\\my_character-" + player.image + ".png";
+let items_collected_count = 0;
+let img_url = 'https://image.flaticon.com/icons/png/512/375/375303.png';
+
 
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
@@ -17,7 +20,7 @@ async function fetchSpawn(name) {
                 player.id = data.token;
                 player.code = data.code;
                 player.name = name;
-                showMessageConsole("Player created succesfully.")
+                showMessageConsole("Player created succesfully.");
                 fetchPlayer(player.id);
                 intervalTimer = setInterval(myTimer, 2000);
             })
@@ -376,7 +379,7 @@ function fetchAttack() {
                     let audio = document.getElementById("attack_1");
                     audio.play();
                 }
-                return data;
+                //return data;
             })
         }).catch(function (err) {
             console.log("ERROR " + err);
@@ -384,9 +387,12 @@ function fetchAttack() {
 }
 
 function fetchCraft() {
-    let img_url = 'https://vignette.wikia.nocookie.net/el-continente-de-arcadia-campana-de-dnd-5e/images/6/6f/Sunblade.jpeg/revision/latest/scale-to-width-down/310?cb=20190403183107&path-prefix=es';
     let formData = new FormData();
     let itemName = document.getElementById("craft_item_text").value;
+    if(itemName.length === 0){
+        showMessageConsole("You must name the item first!");
+        return;
+    }
     let damage = String(Math.floor(Math.random() * (10 + 1)));
     let defense = String(Math.floor(Math.random() * (10 + 1)));
     formData.append('name', itemName);
@@ -394,29 +400,7 @@ function fetchCraft() {
     formData.append('attack', damage);
     formData.append('defense', defense);
 
-    document.getElementById("equipment_name").innerHTML = itemName;
-    document.getElementById("equipment_dmg_text").innerHTML = damage;
-    document.getElementById("equipment_def_text").innerHTML = defense;
 
-    /*return fetch("http://battlearena.danielamo.info/api/craft/b89f9719/" + player.id, {
-        method: 'PUT',
-        body: formData
-    })
-        .then(function(response){
-            if(response.status !== 200){
-                showMessageConsole("You can't craft that item!");
-                return;
-            }
-            showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            document.getElementById("equipment_name").value = itemName;
-            document.getElementById("equipment_dmg_text").value = damage;
-            document.getElementById("equipment_def_text").value = defense;
-            response.json().then(function (data) {
-                showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            })
-        }).catch(function (err) {
-            console.log("ERROR " + err);
-        });*/
 
     var xhr = new XMLHttpRequest();
     var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
@@ -426,9 +410,11 @@ function fetchCraft() {
     xhr.onload = function() {//Call a function when the state changes.
         if(xhr.status === 200) {
             showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            document.getElementById("equipment_name").value = itemName;
-            document.getElementById("equipment_dmg_text").value = damage;
-            document.getElementById("equipment_def_text").value = defense;
+            document.getElementById("equipment_name").innerHTML = itemName;
+            document.getElementById("equipment_dmg_text").innerHTML = damage;
+            document.getElementById("equipment_def_text").innerHTML = defense;
+            document.getElementById("picture_equipment_rectangle").setAttribute("style", 'background-image: url("' + img_url + '");    background-repeat: no-repeat;    background-size: 100%;');         //document.getElementById("ambient").play();
+
             player.object = itemName;
         } else {
             showMessageConsole("You can't craft that item!");
@@ -437,29 +423,72 @@ function fetchCraft() {
     xhr.send(params);
 }
 
+let object_name = "";
+let object_token = "";
+let object_img = "";
+let object_x = "";
+let object_y = "";
 
-function fetchPickup(token) {
-    return fetch("http://battlearena.danielamo.info/api/pickup/b89f9719/" + token)
-        .then(response => response.json());
+function fetchObjectsPlayers() {
+    return fetch("http://battlearena.danielamo.info/api/playersobjects/b89f9719/" + player.id)
+        .then(function(response){
+            if (response.status !== 200){
+                return;
+            }
+            response.json().then(function (data) {
+                try{
+                    object_name = data.objects[0].name;
+                    object_token = data.objects[0].token;
+                    object_img = data.objects[0].image;
+                    object_x = data.objects[0].x;
+                    object_y = data.objects[0].y;
 
-    var xhr = new XMLHttpRequest();
-    var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
-    xhr.open('POST', "http://battlearena.danielamo.info/api/pickup/b89f9719/" + token, true);
+                    var xhr = new XMLHttpRequest();
+                    var params = '';
+                    xhr.open('GET', "http://battlearena.danielamo.info/api/pickup/b89f9719/" + player.id + "/" + object_token, true);
 
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.onload = function() {//Call a function when the state changes.
-        if(xhr.status === 200) {
-            showMessageConsole("The legendary " + itemName + " is now in your hands!");
-            document.getElementById("equipment_name").value = itemName;
-            document.getElementById("equipment_dmg_text").value = damage;
-            document.getElementById("equipment_def_text").value = defense;
-            player.object = itemName;
-            document.getElementById("items_collected_text").innerHTML = document.getElementById("items_collected_text").value + 1;
+                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function() {//Call a function when the state changes.
+                        if(xhr.status === 200) {
+                            //ok
+                            showMessageConsole("The legendary " + object_name + " is now in your hands!");
+                            document.getElementById("equipment_name").innerHTML = object_name;
+                            document.getElementById("equipment_dmg_text").innerHTML = String(Math.floor(Math.random() * (100 + 1)));
+                            document.getElementById("equipment_def_text").innerHTML = String(Math.floor(Math.random() * (100 + 1)));
+                            player.object = object_name;
+                            items_collected_count = items_collected_count +1;
+                            console.log(items_collected_count);
+                            document.getElementById("items_collected_text").innerHTML = String(items_collected_count);
+                        } else {
+                            showMessageConsole("You can't have that item!");
+                        }
+                    };
+                    xhr.send();
+
+
+                    return null;
+                } catch (e) {
+                    return null;
+                }
+
+            });
+        }).catch(function (err) {
+            console.log("ERROR " + err);
+        });
+}
+
+function fetchPickup() {
+    let object = null;
+    fetchObjectsPlayers().then(function(loot) {
+        if(loot === null){
+            showMessageConsole("There ain't items nearby.");
         } else {
-            showMessageConsole("You can't craft that item!");
+            //
         }
-    };
-    xhr.send(params);
+    });
+
+    //if(object === null) return;
+
 }
 
 function fetchRespawn(token) {
