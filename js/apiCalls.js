@@ -7,7 +7,9 @@ let map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-")); 
 let intervalTimer = null;
 let pathname = "assets\\avatars\\my_character-" + player.image + ".png";
 let items_collected_count = 0;
+let deaths_count = 0;
 let img_url = 'https://image.flaticon.com/icons/png/512/375/375303.png';
+let isAlreadyDead = false;
 
 
 async function fetchSpawn(name) {
@@ -60,7 +62,13 @@ function fetchPlayer(token) {
                 document.getElementById("player_vp_text").innerHTML = player.vp;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
-                updateHPBar();
+                //updateHPBar();
+                if(!isAlreadyDead && player.vp === 0){
+                    deaths_count = deaths_count + 1;
+                    isAlreadyDead = true;
+                    showMessageConsole("Noob ez l2p");
+                    document.getElementById("deaths_text").innerHTML = String(deaths_count);
+                }
             }).then(() => {
                 fetchMap(player.id);
                 //fetchMap(token);
@@ -91,7 +99,6 @@ function fetchMap(token) {
             });
         })
 }
-
 
 function myTimer() {
     if(player.name === undefined){
@@ -127,8 +134,6 @@ function updateMinimap(){
 function updateHPBar() {
     let lost_hp = last_hp-player.vp;
     console.log("lost hp: " + lost_hp);
-    if(isNaN(lost_hp)) return;
-
 }
 
 function updateGameView(){
@@ -230,7 +235,7 @@ function updateGameView(){
                 center_center.setAttribute("style", 'background-image: url("assets/options/character_enemy.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
             }
         } else if(map_objects[player.y][player.x] === 1){
-            center_center.setAttribute("style", 'background-image: url("assets/options/loot.png");background-repeat: no-repeat;background-size: 101%;');
+            center_center.setAttribute("style", 'background-image: url("assets/options/character_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
         } else {
             center_center.setAttribute("style", 'background-image: url("assets/options/character.png");background-repeat: no-repeat;background-size: 101%;transform:rotate('+ orientationFactor(player.direction) +'deg);');
         }
@@ -364,6 +369,10 @@ function fetchMovePlayer(direction){
 }
 
 function fetchAttack() {
+    if(player.vp === 0){
+        showMessageConsole("You are dead!");
+        return;
+    }
     return fetch("http://battlearena.danielamo.info/api/attack/b89f9719/" + player.id + "/" + player.direction)
         .then(function(response){
             if(response.status !== 200){
@@ -387,20 +396,22 @@ function fetchAttack() {
 }
 
 function fetchCraft() {
+    if(player.vp === 0){
+        showMessageConsole("You are dead!");
+        return;
+    }
     let formData = new FormData();
     let itemName = document.getElementById("craft_item_text").value;
     if(itemName.length === 0){
         showMessageConsole("You must name the item first!");
         return;
     }
-    let damage = String(Math.floor(Math.random() * (10 + 1)));
-    let defense = String(Math.floor(Math.random() * (10 + 1)));
+    let damage = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
+    let defense = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
     formData.append('name', itemName);
     formData.append('image', img_url);
     formData.append('attack', damage);
     formData.append('defense', defense);
-
-
 
     var xhr = new XMLHttpRequest();
     var params = 'name='+itemName+'&image='+img_url+'&attack='+damage+'&defense='+defense;
@@ -457,7 +468,6 @@ function fetchObjectsPlayers() {
                             document.getElementById("equipment_def_text").innerHTML = String(Math.floor(Math.random() * (100 + 1)));
                             player.object = object_name;
                             items_collected_count = items_collected_count +1;
-                            console.log(items_collected_count);
                             document.getElementById("items_collected_text").innerHTML = String(items_collected_count);
                         } else {
                             showMessageConsole("You can't have that item!");
@@ -478,6 +488,10 @@ function fetchObjectsPlayers() {
 }
 
 function fetchPickup() {
+    if(player.vp === 0){
+        showMessageConsole("You are dead!");
+        return;
+    }
     let object = null;
     fetchObjectsPlayers().then(function(loot) {
         if(loot === null){
@@ -491,10 +505,11 @@ function fetchPickup() {
 
 }
 
-function fetchRespawn(token) {
+function fetchRespawn() {
     return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + player.id)
         .then(function(response) {
             if(response.status === 200){
+                isAlreadyDead = false;
                 showMessageConsole("Player respawned succesfully.");
             }
         });

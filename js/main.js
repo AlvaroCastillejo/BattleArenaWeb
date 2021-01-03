@@ -90,6 +90,7 @@ craftItemButton.addEventListener(("click"), () => {
     fetchCraft();
 });
 
+
 let reviveItemButton = document.getElementById("revive_player");
 reviveItemButton.addEventListener(("click"), () => {
     if(typeof player.name === "undefined"){
@@ -98,7 +99,9 @@ reviveItemButton.addEventListener(("click"), () => {
     }
 
     fetchRespawn().then(() => {
-        //TODO: Controlar códigos de error de todas las llamadas.
-    });
+        //
+        }
+    );
 });
+
 
