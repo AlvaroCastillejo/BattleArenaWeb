@@ -43,30 +43,38 @@ document.addEventListener('keyup', (e) => {
         if(code === "UP"){
             fetchMovePlayer("N").then(() => {
                 player.direction = "N";
+                document.getElementById("brujula").style.transform = "rotate(90deg)";
             })
         } else if (code === "DOWN"){
             fetchMovePlayer("S").then(() => {
                 player.direction = "S";
+                document.getElementById("brujula").style.transform = "rotate(-90deg)";
             })
         } else if (code === "LEFT"){
             fetchMovePlayer("O").then(() => {
                 player.direction = "O";
+                document.getElementById("brujula").style.transform = "rotate(0deg)";
             })
         } else if (code === "RIGHT"){
             fetchMovePlayer("E").then(() => {
                 player.direction = "E";
+                document.getElementById("brujula").style.transform = "rotate(180deg)";
             })
         } else if (code === "LOOKING UP") {
             player.direction = "N";
+            document.getElementById("brujula").style.transform = "rotate(90deg)";
             updateGameView();
         } else if (code === "LOOKING DOWN") {
             player.direction = "S";
+            document.getElementById("brujula").style.transform = "rotate(-90deg)";
             updateGameView();
         } else if (code === "LOOKING LEFT") {
             player.direction = "O";
+            document.getElementById("brujula").style.transform = "rotate(0deg)";
             updateGameView();
         } else if (code === "LOOKING RIGHT") {
             player.direction = "E";
+            document.getElementById("brujula").style.transform = "rotate(180deg)";
             updateGameView();
         } else if (code === "ATTACK") {
             fetchAttack();
@@ -82,10 +90,6 @@ craftItemButton.addEventListener(("click"), () => {
         showMessageConsole("Your journey has not begin yet.");
         return;
     }
-
-    document.getElementById("equipment_name").value = "E";
-    document.getElementById("equipment_dmg_text").value = "Es";
-    document.getElementById("equipment_def_text").value = "Es";
 
     fetchCraft();
 });

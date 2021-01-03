@@ -62,8 +62,8 @@ function fetchPlayer(token) {
                 document.getElementById("player_vp_text").innerHTML = player.vp;
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
-                //updateHPBar();
-                if(!isAlreadyDead && player.vp === 0){
+                document.getElementById("brujula").style.transform = "rotate(" + orientationFactor(player.direction) + "deg)";
+                if(!isAlreadyDead && (player.vp === 0 || player.vp < 0)){
                     deaths_count = deaths_count + 1;
                     isAlreadyDead = true;
                     showMessageConsole("Noob ez l2p");
@@ -129,11 +129,6 @@ function updateMinimap(){
         var jump = document.createElement("br");
         document.getElementById("minimap_container").appendChild(jump);
     }
-}
-
-function updateHPBar() {
-    let lost_hp = last_hp-player.vp;
-    console.log("lost hp: " + lost_hp);
 }
 
 function updateGameView(){
@@ -514,25 +509,3 @@ function fetchRespawn() {
             }
         });
 }
-
-function fetchPlayersObjects(token) {
-    return fetch("http://battlearena.danielamo.info/api/playersobjects/b89f9719/" + token)
-        .then(response => response.json());
-}
-
-
-/*async function fetchh(name) {
-    await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
-        .then(function (response) {
-            if (response.status !== 200) {
-                throw new Error(response.status);
-            }else{
-                consoleInfo.log(response.json());
-            }
-        })
-}*/
-
-function getPlayer(){
-    return player;
-}
-
