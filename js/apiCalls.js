@@ -9,12 +9,15 @@ let pathname = "assets\\avatars\\my_character-" + player.image + ".png";
 let items_collected_count = 0;
 let deaths_count = 0;
 let img_url = 'https://image.flaticon.com/icons/png/512/375/375303.png';
+//Tells if the player is dead or not.
 let isAlreadyDead = false;
 
+//Array with several quotes for when the player dies.
 let death_quotes = ["You have died. Remember that death is not the opposite of life, but a part of it. ","You have died. Remember that we all die. The goal isn’t to live forever, the goal is to create something that will.","You have died. Remember that to the well-organized mind, death is but the next great adventure.","You have died. Remember that people living deeply have no fear of death.","You have died. Remember that a man with outward courage dares to die; a man with inner courage dares to live."];
+//Array with several images for the object created.
 let img_buffer = ["https://image.flaticon.com/icons/png/512/375/375303.png", "https://i.pinimg.com/originals/31/e7/41/31e741bdfc3c897836c533816b75c27f.png", "https://www.firstalert.com/wp-content/uploads/2017/12/Pro10_SA729CE_Front_900x900px.png", "https://www.nzbrush.co.nz/workspace/uploads/products/30362-stainless-steel-spade-w-d-handle-pxl.png"];
 
-
+//Calls the API to spawn a player.
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
         .then(function (response) {
@@ -27,21 +30,13 @@ async function fetchSpawn(name) {
                 player.name = name;
                 showMessageConsole("A journey of a thousand miles begins with a single step.");
                 fetchPlayer(player.id);
+                //When the player is spawned then the loop begins. This loop refreshes the game every 2 seconds.
                 intervalTimer = setInterval(myTimer, 2000);
             })
         })
-        /*OLD SYSTEM OPERATIONAL
-        .then(response => response.json())
-        .then(data => {
-            player.id = data.token;
-            player.code = data.code;
-            player.name = name;
-            fetchPlayer(player.id);
-        }).then(() => {
-            consoleInfo.log("player token attack is: " + player.attack)
-        });*/
 }
 
+//Calls the API to get the information about a player.
 function fetchPlayer(token) {
     return fetch("http://battlearena.danielamo.info/api/player/b89f9719/" + token)
         .then(function (response) {
@@ -49,6 +44,7 @@ function fetchPlayer(token) {
                 return;
             }
             response.json().then(function (data) {
+                //Initialize the player.
                 last_hp = player.vp;
                 player.x = data.x;
                 player.y = data.y;
@@ -66,21 +62,23 @@ function fetchPlayer(token) {
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 document.getElementById("brujula").style.transform = "rotate(" + orientationFactor(player.direction) + "deg)";
-
+                //Check if the user is dead.
                 if(!isAlreadyDead && (player.vp === 0 || player.vp < 0)){
                     deaths_count = deaths_count + 1;
                     isAlreadyDead = true;
+                    //Show a random message.
                     let index = (Math.floor(Math.random() * (5)));
                     showMessageConsole(death_quotes[index]);
                     document.getElementById("deaths_text").innerHTML = String(deaths_count);
                 }
             }).then(() => {
+                //When the player has been initialized call to fetch the map.
                 fetchMap(player.id);
-                //fetchMap(token);
             })
         })
 }
 
+//Calls the API to get the information about the map.
 function fetchMap(token) {
     return fetch("http://battlearena.danielamo.info/api/map/b89f9719/" + token)
         .then(function (response) {
@@ -88,9 +86,11 @@ function fetchMap(token) {
                 return;
             }
             response.json().then(function (data) {
+                //Reset the maps.
                 map = new Array(40).fill(0).map(() => new Array(40).fill(0));  //0: nothing, 1: enemy
                 map_objects = new Array(40).fill(0).map(() => new Array(40).fill(0));
                 map_direction = new Array(40).fill("-").map(() => new Array(40).fill("-"));  //-: no player
+                //Update maps.
                 data.enemies.forEach((item) => {
                     let x = item.x;
                     let y = item.y;
@@ -100,12 +100,15 @@ function fetchMap(token) {
                 data.objects.forEach((item) => {
                     map_objects[item.y][item.x] = 1;
                 });
+                //When the maps are up to date update the game view.
                 updateGameView();
             });
         })
 }
 
+//Updates the game.
 function myTimer() {
+    //If the player has been deleted or there isn't one.
     if(player.name === undefined){
         clearInterval(intervalTimer);
     } else {
@@ -113,7 +116,9 @@ function myTimer() {
     }
 }
 
+//Updates the minimap.
 function updateMinimap(){
+    //In order to update the minimap create a 40x40 matrix of divs.
     document.getElementById("minimap_container").innerHTML = "";
     for (var i = 0; i < 40; i++) {
         for (var j = 0; j < 40; j++) {
@@ -136,6 +141,7 @@ function updateMinimap(){
     }
 }
 
+//Updates the game view. What the player sees.
 function updateGameView(){
     let top_left = document.getElementById("top_left");
     let top_center = document.getElementById("top_center");
@@ -151,10 +157,14 @@ function updateGameView(){
 
     updateMinimap();
 
+    //This process is the same for every cell the user can see. 3x3.
     try{
+        //Check if the user is at the left border.
         if(player.x === "0"){
+            //If it is show the border image.
             bottom_left.setAttribute("style", 'background-image: url("assets/options/wallgif.gif");background-repeat: no-repeat;background-size: 101%;');
         } else {
+            //If its not check whether there is an enemy, enemy and loot, loot or nothing.
             if (map[player.y - 1][player.x - 1] === 1) {
                 if (map_objects[player.y - 1][player.x - 1] === 1) {
                     bottom_left.setAttribute("style", 'background-image: url("assets/options/enemy_loot.png");background-repeat: no-repeat;background-size: 101%;transform:rotate(' + orientationFactor(map_direction[player.y - 1][player.x - 1]) + 'deg);');
@@ -320,6 +330,7 @@ function updateGameView(){
     }
 }
 
+//Changes the view to the home screen.
 function showHomeScreen(){
     let top_left = document.getElementById("top_left");
     let top_center = document.getElementById("top_center");
@@ -344,6 +355,7 @@ function showHomeScreen(){
     bottom_right.setAttribute("style", 'background-image: url("assets/homescreen/homescreen_09.png");background-repeat: no-repeat;background-size: 101%;');
 }
 
+//Calls the API to delete the player.
 function fetchDeletePlayer() {
     return fetch("http://battlearena.danielamo.info/api/remove/b89f9719/" + player.id + "/" + player.code)
         .then(function(response) {
@@ -351,11 +363,11 @@ function fetchDeletePlayer() {
                 showMessageConsole("Your player has been removed. There is no failure except in no longer trying.");
 
                 player = new Player();
-                //document.getElementById("ambient).pause();
             }
         });
 }
 
+//Calls the API to update the position of the player.
 function fetchMovePlayer(direction){
     return fetch("http://battlearena.danielamo.info/api/move/b89f9719/" + player.id + "/" + direction)
         .then(function(response) {
@@ -368,6 +380,7 @@ function fetchMovePlayer(direction){
         });
 }
 
+//Calls the API to perform an attack.
 function fetchAttack() {
     if(player.vp === 0){
         showMessageConsole("You are dead!");
@@ -381,6 +394,7 @@ function fetchAttack() {
             }
             response.json().then(function (data) {
                 showMessageConsole("HP taken: " + data);
+                //Plays an audio file for the attack sound. If the HP taken is 0 the sound effect will be an armour pretending the attack hit the shield.
                 if(data === 0){
                     let audio = document.getElementById("missed");
                     audio.play();
@@ -388,13 +402,13 @@ function fetchAttack() {
                     let audio = document.getElementById("attack_1");
                     audio.play();
                 }
-                //return data;
             })
         }).catch(function (err) {
 
         });
 }
 
+//Calls the API to create an object.
 function fetchCraft() {
     if(player.vp === 0){
         showMessageConsole("You are dead!");
@@ -406,6 +420,7 @@ function fetchCraft() {
         showMessageConsole("You must name the item first!");
         return;
     }
+    //Random values for the item created.
     let damage = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
     let defense = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
     formData.append('name', itemName);
@@ -440,7 +455,7 @@ let object_token = "";
 let object_img = "";
 let object_x = "";
 let object_y = "";
-
+//Calls the API to get the information about the objects and players around the player.
 function fetchObjectsPlayers() {
     return fetch("http://battlearena.danielamo.info/api/playersobjects/b89f9719/" + player.id)
         .then(function(response){
@@ -490,6 +505,7 @@ function fetchObjectsPlayers() {
         });
 }
 
+//Calls the API to inform that the player wants to take the object.
 function fetchPickup() {
     if(player.vp === 0){
         showMessageConsole("You are dead!");
@@ -508,12 +524,13 @@ function fetchPickup() {
 
 }
 
+//Calls the API to respawn the player.
 function fetchRespawn() {
     return fetch("http://battlearena.danielamo.info/api/respawn/b89f9719/" + player.id)
         .then(function(response) {
             if(response.status === 200){
                 isAlreadyDead = false;
-                showMessageConsole("Player respawned succesfully.");
+                showMessageConsole("Player re-spawned successfully.");
             }
         });
 }

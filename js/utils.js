@@ -1,3 +1,4 @@
+//Determines the factor for an image to be rotated depending on the orientation.
 function orientationFactor(orientation){
     switch (orientation) {
         case "N":

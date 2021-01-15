@@ -82,6 +82,7 @@ class Player {
         this._object = value;
     }
 
+    //Update the position of the player.
     move(direction) {
         let new_x = Number(player.x);
         let new_y = Number(player.y);

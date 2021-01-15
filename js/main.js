@@ -1,29 +1,31 @@
+//Event listener for the Spawn button.
 let newPlayerButton = document.getElementById("new_player");
 newPlayerButton.addEventListener("click", () => {
     if(typeof player.name !== "undefined"){
-        //TODO: Mostrar por la consola del juego el error y las instrucciones.
         showMessageConsole("Your journey has already begun");
         return;
     }
     let name = document.getElementById("input_name").value;
     fetchSpawn(name).then(() => {
-        //TODO: Controlar códigos de error de todas las llamadas.
+
     });
 });
 
+//Event listener for the Delete Player button.
 let deletePlayerButton = document.getElementById("delete_player");
 deletePlayerButton.addEventListener("click", () =>{
     if(typeof player.name === "undefined"){
-        //TODO: Mostrar por la consola del juego el error y las instrucciones.
+
         showMessageConsole("Can't see any object around you.");
         return;
     }
     fetchDeletePlayer().then(() => {
-        //TODO: Mostrar pantalla de inicio.
+
         showHomeScreen();
     })
 });
 
+//Event listener for the keys.
 document.addEventListener('keyup', (e) => {
     let code = "";
     if(typeof player.name !== "undefined"){
@@ -83,6 +85,7 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
+//Event listener for the Craft Item button.
 let craftItemButton = document.getElementById("craft_item");
 craftItemButton.addEventListener(("click"), () => {
     if(typeof player.name === "undefined"){
@@ -93,7 +96,7 @@ craftItemButton.addEventListener(("click"), () => {
     fetchCraft();
 });
 
-
+//Event listener for the Re-spawn button.
 let reviveItemButton = document.getElementById("revive_player");
 reviveItemButton.addEventListener(("click"), () => {
     if(typeof player.name === "undefined"){
