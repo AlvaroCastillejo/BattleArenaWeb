@@ -2,7 +2,7 @@ let newPlayerButton = document.getElementById("new_player");
 newPlayerButton.addEventListener("click", () => {
     if(typeof player.name !== "undefined"){
         //TODO: Mostrar por la consola del juego el error y las instrucciones.
-        showMessageConsole("The player already exists.");
+        showMessageConsole("Your journey has already begun");
         return;
     }
     let name = document.getElementById("input_name").value;
@@ -15,8 +15,7 @@ let deletePlayerButton = document.getElementById("delete_player");
 deletePlayerButton.addEventListener("click", () =>{
     if(typeof player.name === "undefined"){
         //TODO: Mostrar por la consola del juego el error y las instrucciones.
-        showMessageConsole("The object doesn't exists.")
-        console.log("El objeto no existe");
+        showMessageConsole("Can't see any object around you.");
         return;
     }
     fetchDeletePlayer().then(() => {
@@ -87,7 +86,7 @@ document.addEventListener('keyup', (e) => {
 let craftItemButton = document.getElementById("craft_item");
 craftItemButton.addEventListener(("click"), () => {
     if(typeof player.name === "undefined"){
-        showMessageConsole("Your journey has not begin yet.");
+        showMessageConsole("Your journey has not begun yet.");
         return;
     }
 
@@ -98,7 +97,7 @@ craftItemButton.addEventListener(("click"), () => {
 let reviveItemButton = document.getElementById("revive_player");
 reviveItemButton.addEventListener(("click"), () => {
     if(typeof player.name === "undefined"){
-        showMessageConsole("Your journey has not begin yet.");
+        showMessageConsole("Your journey has not begun yet.");
         return;
     }
 

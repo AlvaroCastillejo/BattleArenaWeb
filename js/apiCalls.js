@@ -11,6 +11,9 @@ let deaths_count = 0;
 let img_url = 'https://image.flaticon.com/icons/png/512/375/375303.png';
 let isAlreadyDead = false;
 
+let death_quotes = ["You have died. Remember that death is not the opposite of life, but a part of it. ","You have died. Remember that we all die. The goal isn’t to live forever, the goal is to create something that will.","You have died. Remember that to the well-organized mind, death is but the next great adventure.","You have died. Remember that people living deeply have no fear of death.","You have died. Remember that a man with outward courage dares to die; a man with inner courage dares to live."];
+let img_buffer = ["https://image.flaticon.com/icons/png/512/375/375303.png", "https://i.pinimg.com/originals/31/e7/41/31e741bdfc3c897836c533816b75c27f.png", "https://www.firstalert.com/wp-content/uploads/2017/12/Pro10_SA729CE_Front_900x900px.png", "https://www.nzbrush.co.nz/workspace/uploads/products/30362-stainless-steel-spade-w-d-handle-pxl.png"];
+
 
 async function fetchSpawn(name) {
     await fetch("http://battlearena.danielamo.info/api/spawn/b89f9719/" + name)
@@ -22,7 +25,7 @@ async function fetchSpawn(name) {
                 player.id = data.token;
                 player.code = data.code;
                 player.name = name;
-                showMessageConsole("Player created succesfully.");
+                showMessageConsole("A journey of a thousand miles begins with a single step.");
                 fetchPlayer(player.id);
                 intervalTimer = setInterval(myTimer, 2000);
             })
@@ -63,10 +66,12 @@ function fetchPlayer(token) {
                 document.getElementById("player_avatar").setAttribute("style", 'grid-area: player_pic;    margin-left: 20px;    background-image: url("assets/avatars/my_character-'+ player.image
                     +'.png");    background-repeat: no-repeat;    background-size: 220%;    background-position: -90px;    background-position-y: -40px;');         //document.getElementById("ambient").play();
                 document.getElementById("brujula").style.transform = "rotate(" + orientationFactor(player.direction) + "deg)";
+
                 if(!isAlreadyDead && (player.vp === 0 || player.vp < 0)){
                     deaths_count = deaths_count + 1;
                     isAlreadyDead = true;
-                    showMessageConsole("Noob ez l2p");
+                    let index = (Math.floor(Math.random() * (5)));
+                    showMessageConsole(death_quotes[index]);
                     document.getElementById("deaths_text").innerHTML = String(deaths_count);
                 }
             }).then(() => {
@@ -343,7 +348,7 @@ function fetchDeletePlayer() {
     return fetch("http://battlearena.danielamo.info/api/remove/b89f9719/" + player.id + "/" + player.code)
         .then(function(response) {
             if(response.status === 200){
-                showMessageConsole("Player deleted succesfully.");
+                showMessageConsole("Your player has been removed. There is no failure except in no longer trying.");
 
                 player = new Player();
                 //document.getElementById("ambient).pause();
@@ -358,7 +363,7 @@ function fetchMovePlayer(direction){
                 player.move(direction);
                 updateGameView();
             } else {
-                showMessageConsole("You can't move there!");
+                showMessageConsole("Stop your steps! Life is worth living.");
             }
         });
 }
@@ -386,7 +391,7 @@ function fetchAttack() {
                 //return data;
             })
         }).catch(function (err) {
-            console.log("ERROR " + err);
+
         });
 }
 
@@ -404,7 +409,8 @@ function fetchCraft() {
     let damage = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
     let defense = Math.ceil(Math.random() * 99) * (Math.round(Math.random()) ? 1 : -1); //String(Math.floor(Math.random() * (10 + 1)));
     formData.append('name', itemName);
-    formData.append('image', img_url);
+    let index = (Math.floor(Math.random() * (4)));
+    formData.append('image', img_buffer[index]);
     formData.append('attack', damage);
     formData.append('defense', defense);
 
@@ -419,7 +425,7 @@ function fetchCraft() {
             document.getElementById("equipment_name").innerHTML = itemName;
             document.getElementById("equipment_dmg_text").innerHTML = damage;
             document.getElementById("equipment_def_text").innerHTML = defense;
-            document.getElementById("picture_equipment_rectangle").setAttribute("style", 'background-image: url("' + img_url + '");    background-repeat: no-repeat;    background-size: 100%;');         //document.getElementById("ambient").play();
+            document.getElementById("picture_equipment_rectangle").setAttribute("style", 'background-image: url("' + img_buffer[index] + '");    background-repeat: no-repeat;    background-size: 100%;');         //document.getElementById("ambient").play();
 
             player.object = itemName;
         } else {
@@ -462,6 +468,8 @@ function fetchObjectsPlayers() {
                             document.getElementById("equipment_dmg_text").innerHTML = String(Math.floor(Math.random() * (100 + 1)));
                             document.getElementById("equipment_def_text").innerHTML = String(Math.floor(Math.random() * (100 + 1)));
                             player.object = object_name;
+                            let index = (Math.floor(Math.random() * (4)));
+                            document.getElementById("picture_equipment_rectangle").setAttribute("style", 'background-image: url("' + img_buffer[index] + '");    background-repeat: no-repeat;    background-size: 100%;');         //document.getElementById("ambient").play();
                             items_collected_count = items_collected_count +1;
                             document.getElementById("items_collected_text").innerHTML = String(items_collected_count);
                         } else {
@@ -478,7 +486,7 @@ function fetchObjectsPlayers() {
 
             });
         }).catch(function (err) {
-            console.log("ERROR " + err);
+
         });
 }
 
